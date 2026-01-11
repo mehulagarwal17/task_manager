@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2>Your Tasks</h2>
+        <a href="{% url 'task_create' %}" class="btn">+ Create New Task</a>
+    </div>
+
+    {% if tasks %}
+        <div class="task-list">
+            {% for task in tasks %}
+                <div class="task-item {% if task.completed %}completed{% endif %}">
+                    <div class="task-content">
+                        <h4>{{ task.title }}</h4>
+                        {% if task.description %}
+                            <p>{{ task.description|truncatewords:20 }}</p>
+                        {% endif %}
+                        <div class="task-status">
+                            {% if task.completed %}
+                                <span class="status-completed">✓ Completed</span>
+                            {% else %}
+                                <span class="status-pending">○ Pending</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-secondary">Edit</a>
+                        <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 3rem; color: #ccc;">
+            <h3>No tasks yet</h3>
+            <p style="margin-top: 1rem;">Start by creating your first task!</p>
+            <a href="{% url 'task_create' %}" class="btn" style="margin-top: 1.5rem;">Create Your First Task</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
